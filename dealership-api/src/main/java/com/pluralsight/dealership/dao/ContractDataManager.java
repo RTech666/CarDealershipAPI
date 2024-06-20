@@ -8,19 +8,23 @@ import java.util.List;
 
 @Repository
 public class ContractDataManager {
+    // Initalize variable, as private.
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    // Create getAllContracts method.
     public List<Contract> getAllContracts() {
         String sql = "SELECT * FROM sale_contracts";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Contract.class));
     }
 
+    // Create getLastTenContracts method.
     public List<Contract> getLastTenContracts() {
         String sql = "SELECT * FROM sale_contracts ORDER BY ContractDate DESC LIMIT 10";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Contract.class));
     }
 
+    // Create addContract method.
     public void addContract(Contract contract) {
         String sql = "INSERT INTO sale_contracts (ID, ContractType, ContractDate, CustomerName, CustomerEmail, VehicleVIN, VehicleYear, VehicleMake, VehicleModel, VehicleType, VehicleColor, VehicleOdometer, VehiclePrice, TotalPrice, SalesTax, RecordingFee, ProcessingFee, LeaseFee, FinanceOption, MonthlyPayment) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
@@ -47,11 +51,13 @@ public class ContractDataManager {
             );
     }
 
+    // Create getContractById method.
     public Contract getContractById(int id) {
         String sql = "SELECT * FROM sale_contracts WHERE ID = ?";
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Contract.class), id);
     }
 
+    // Create updateContract method.
     public void updateContract(Contract contract) {
         String sql = "UPDATE sale_contracts SET ContractType = ?, ContractDate = ?, CustomerName = ?, CustomerEmail = ?, VehicleVIN = ?, VehicleYear = ?, VehicleMake = ?, VehicleModel = ?, VehicleType = ?, VehicleColor = ?, VehicleOdometer = ?, VehiclePrice = ?, TotalPrice = ?, SalesTax = ?, RecordingFee = ?, ProcessingFee = ?, LeaseFee = ?, FinanceOption = ?, MonthlyPayment = ? WHERE ID = ?";
         jdbcTemplate.update(sql,
@@ -78,6 +84,7 @@ public class ContractDataManager {
             );
     }
 
+    // Create deleteContract method.
     public void deleteContract(int id) {
         String sql = "DELETE FROM sale_contracts WHERE ID = ?";
         jdbcTemplate.update(sql, id);
